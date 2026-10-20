@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Fibre Fuelled Field Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one column field guide. Sticky tab rail, each tab a self-contained section; grams always in mono. */
+:root{
+  --bg:#f3f5ef;          /* leafy off-white */
+  --surface:#ffffff;
+  --ink:#1b231e;
+  --muted:#5b665e;
+  --line:#d9dfd4;
+  --beet:#8c1d4b;        /* accent: beetroot */
+  --beet-soft:#f6e3ea;
+  --leaf:#2f6b3f;        /* secondary: chlorophyll */
+  --leaf-soft:#e2efe3;
+  --warn:#9a5a00;
+  --warn-soft:#fbefd9;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121714; --surface:#1a211c; --ink:#e7ece6; --muted:#9aa79d; --line:#2c362f;
+    --beet:#f07aa6; --beet-soft:#3a1a27; --leaf:#7fcf8f; --leaf-soft:#1c3122;
+    --warn:#f2b55a; --warn-soft:#3a2b12; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121714; --surface:#1a211c; --ink:#e7ece6; --muted:#9aa79d; --line:#2c362f;
+  --beet:#f07aa6; --beet-soft:#3a1a27; --leaf:#7fcf8f; --leaf-soft:#1c3122;
+  --warn:#f2b55a; --warn-soft:#3a2b12; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.hero{padding-block:40px 20px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,6vw,56px);font-weight:800;letter-spacing:-.02em;margin-top:8px}
+h1 em{font-style:normal;color:var(--beet)}
+h2{font-size:clamp(26px,4vw,34px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:20px;font-weight:700}
+p{margin:0}
+.lede{max-width:62ch;color:var(--muted);margin-top:14px;font-size:18px}
+.g{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;color:var(--leaf);white-space:nowrap}
+.p{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;color:var(--beet);white-space:nowrap}
+
+/* tabs */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-block:8px}
+nav.tabs .wrap::-webkit-scrollbar{display:none}
+nav.tabs button{flex:0 0 auto;font:600 15px var(--body);color:var(--muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:7px 14px;cursor:pointer}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--beet);outline-offset:2px}
+
+main section{padding-block:28px 64px;display:flex;flex-direction:column;gap:22px}
+.intro{max-width:64ch;color:var(--muted)}
+
+/* big ideas */
+.ideas{display:flex;flex-direction:column;gap:0;counter-reset:idea;border-top:1px solid var(--line)}
+.idea{display:grid;grid-template-columns:52px 1fr;gap:4px 14px;padding-block:18px;border-bottom:1px solid var(--line)}
+.idea::before{counter-increment:idea;content:counter(idea,decimal-leading-zero);font:700 15px var(--mono);color:var(--beet);padding-top:3px}
+.idea > div{min-width:0;display:flex;flex-direction:column;gap:6px}
+.idea p{max-width:64ch}
+.idea .src{font-size:14px;color:var(--muted)}
+.idea .src a{color:var(--muted)}
+
+.callout{border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.callout.leaf{background:var(--leaf-soft)}
+.callout.beet{background:var(--beet-soft)}
+.callout.warn{background:var(--warn-soft)}
+.callout strong{font-family:var(--display);font-size:18px}
+
+.figure{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.fig b{font:700 26px var(--mono);font-variant-numeric:tabular-nums}
+.fig span{font-size:14px;color:var(--muted);line-height:1.35}
+.fig.hi{border-color:var(--leaf)}
+.fig.hi b{color:var(--leaf)}
+
+/* avoid */
+.avoid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.av{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.av h3{font-size:18px}
+.av .tag{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;align-self:flex-start;padding:3px 8px;border-radius:6px}
+.tag.cut{background:var(--beet-soft);color:var(--beet)}
+.tag.lim{background:var(--warn-soft);color:var(--warn)}
+.tag.myth{background:var(--leaf-soft);color:var(--leaf)}
+.av p{font-size:15.5px}
+.av .why{color:var(--muted);font-size:14.5px}
+
+/* quiz */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.qmeta{display:flex;justify-content:space-between;align-items:center;font:600 13px var(--mono);color:var(--muted)}
+.qbar{height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+.qbar i{display:block;height:100%;background:var(--leaf);width:0;transition:width .3s}
+.qtext{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.25}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{text-align:left;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.right{border-color:var(--leaf);background:var(--leaf-soft)}
+.opt.wrong{border-color:var(--beet);background:var(--beet-soft)}
+.opt:disabled{cursor:default}
+.explain{border-left:3px solid var(--leaf);padding-left:12px;font-size:15.5px}
+.explain b{font-family:var(--display)}
+.qactions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:700 15px var(--body);border-radius:999px;padding:10px 18px;cursor:pointer;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* plan / ramp */
+.ramp{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:end}
+.step{display:flex;flex-direction:column;gap:6px;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left}
+.step .bar{background:var(--leaf-soft);border-radius:8px 8px 4px 4px;position:relative;border:1.5px solid transparent}
+.step .bar i{position:absolute;inset:auto 0 0 0;background:var(--leaf);border-radius:6px 6px 3px 3px;opacity:.85}
+.step[aria-pressed="true"] .bar{border-color:var(--ink)}
+.step b{font:700 15px var(--mono);font-variant-numeric:tabular-nums}
+.step span{font-size:13px;color:var(--muted);line-height:1.3}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;padding:0;margin:0;list-style:none}
+.rules li{display:flex;flex-direction:column;gap:2px;padding-block:10px;border-top:1px solid var(--line)}
+.rules li b{font-family:var(--display);font-size:17px}
+.rules li span{font-size:15.5px;color:var(--muted)}
+
+.tracker{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.trackhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.total{font:700 44px var(--mono);font-variant-numeric:tabular-nums;color:var(--leaf);line-height:1}
+.total small{font-size:18px;color:var(--muted);font-weight:500}
+.meter{height:14px;background:var(--leaf-soft);border-radius:8px;position:relative;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--leaf);border-radius:8px;transition:width .25s}
+.meter u{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14.5px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip:hover{border-color:var(--leaf)}
+.chip .g{font-size:13px}
+.log{font-size:14px;color:var(--muted)}
+.trackfoot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+
+/* shop */
+.shopgroup{display:flex;flex-direction:column;gap:8px}
+.shopgroup h3{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.shopgroup h3 small{font:500 13px var(--body);color:var(--muted)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:700 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td .note{display:block;font-size:13.5px;color:var(--muted)}
+.check{width:18px;height:18px;accent-color:var(--leaf);vertical-align:middle}
+tr.got td{opacity:.5}
+tr.got td:first-child{text-decoration:line-through}
+
+/* recipes */
+.recipes{display:flex;flex-direction:column;gap:14px}
+details.rec{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+details.rec summary{list-style:none;cursor:pointer;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center}
+details.rec summary::-webkit-details-marker{display:none}
+details.rec summary h3{font-size:19px}
+.recmeta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--muted)}
+.macros{display:flex;gap:12px;font-size:15px}
+.recbody{padding:0 18px 18px;display:grid;grid-template-columns:1fr 1.3fr;gap:18px}
+.recbody > div{min-width:0}
+.recbody h4{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.recbody ul,.recbody ol{margin:0;padding-left:20px;font-size:15.5px;display:flex;flex-direction:column;gap:4px}
+.recbody .tip{grid-column:1/-1;font-size:14.5px;background:var(--leaf-soft);border-radius:10px;padding:10px 12px}
+.daycard{background:var(--ink);color:var(--bg);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.daycard h3{color:var(--bg)}
+.daycard table{font-size:15px}
+.daycard th{background:transparent;color:var(--bg);opacity:.7;border-color:rgba(127,127,127,.35)}
+.daycard td{border-color:rgba(127,127,127,.35)}
+.daycard .g,.daycard .p{color:inherit}
+.daycard tfoot td{font-weight:700;border-top:2px solid currentColor}
+
+/* studies */
+.studies{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.study{padding-block:14px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.study a{font-family:var(--display);font-weight:700;font-size:17px;color:var(--ink);text-decoration-color:var(--beet);text-underline-offset:3px}
+.study .cite{font:500 13px var(--mono);color:var(--muted)}
+.study p{font-size:15.5px;max-width:66ch}
+.study .kind{font:700 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--leaf)}
+.study .kind.mouse{color:var(--warn)}
+
+footer{padding-block:24px 48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+
+@media (max-width:640px){
+  .figure{grid-template-columns:1fr 1fr}
+  .avoid,.rules{grid-template-columns:1fr}
+  .recbody{grid-template-columns:1fr}
+  .ramp{gap:5px}
+  .step span{font-size:11.5px}
+  .idea{grid-template-columns:36px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="hero wrap">
+  <div class="eyebrow">Fiber Fueled · Dr Will Bulsiewicz · the parts that matter</div>
+  <h1>Feed the <em>39 trillion</em>.<br>Get to 60–75&nbsp;g a day.</h1>
+  <p class="lede">The whole book on one page: why fibre matters, what to cut, a quiz to make it stick, then a ramp-up plan, a UK shopping list and recipes that work in someone else's kitchen. Dairy-free, nut-free, and built around 125&nbsp;g of protein.</p>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap" role="tablist">
+    <button role="tab" data-tab="ideas">Big ideas</button>
+    <button role="tab" data-tab="avoid">Avoid</button>
+    <button role="tab" data-tab="quiz">Quiz</button>
+    <button role="tab" data-tab="plan">Ramp-up + tracker</button>
+    <button role="tab" data-tab="shop">Shopping list</button>
+    <button role="tab" data-tab="recipes">Recipes</button>
+    <button role="tab" data-tab="studies">Studies</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ BIG IDEAS ============ -->
+<section id="ideas" data-panel="ideas">
+  <h2>The book in ten ideas</h2>
+  <p class="intro">If you only ever read this tab, you've got the book. Everything else in it is evidence and recipes for these points.</p>
+
+  <div class="figure">
+    <div class="fig"><b>15&nbsp;g</b><span>what the average American eats a day (the book's figure). It's the typical intake, not the recommendation.</span></div>
+    <div class="fig"><b>~20&nbsp;g</b><span>roughly what the average UK adult eats</span></div>
+    <div class="fig"><b>30&nbsp;g</b><span>the official UK minimum (NHS / SACN)</span></div>
+    <div class="fig hi"><b>100&nbsp;g+</b><span>the Hadza, hunter-gatherers with ~40% more gut diversity than Americans</span></div>
+  </div>
+  <div class="callout leaf"><strong>So 60–75 g is a good target, but don't jump straight there.</strong><p>You're going for double the UK minimum, which is closer to how humans ate for most of history. The one rule the book hammers is <b>"low and slow"</b>: build up over about 8 weeks (the plan is in the Ramp-up tab), or your gut will make you regret it.</p></div>
+
+  <div class="ideas">
+    <div class="idea"><div>
+      <h3>You're feeding a whole ecosystem</h3>
+      <p>About 39 trillion microbes live in your colon, mostly bacteria, and every bite you eat ends up feeding them. They help run your immune system (70% of it sits next to your gut), metabolism, hormones, mood and how your genes get switched on. Diet changes which microbes thrive <b>within 24 hours</b>.</p>
+      <p class="src">David et al., Nature 2014: switching to an all-animal diet changed the gut microbiome within a day.</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>Fibre is microbe food, not just roughage</h3>
+      <p>Humans have about 17 enzymes for breaking down complex carbs. Your gut microbes have up to ~60,000. So you can't digest fibre yourself. It passes untouched to your colon, and your bacteria do the work.</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>The payoff is short-chain fatty acids (SCFAs)</h3>
+      <p>When bacteria ferment fibre they make <b>acetate, propionate and butyrate</b>. Butyrate supplies up to 70% of the energy for the cells lining your colon. It tightens the gut wall ("leaky gut"), calms inflammation, steadies blood sugar, triggers the hormones that tell you you're full, and reaches the brain. In the book's words: prebiotics (fibre) + probiotics (good microbes) = postbiotics (SCFAs).</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>Starve them and they eat you</h3>
+      <p>On a low-fibre diet, gut bacteria switch to eating the protective mucus layer of your gut lining. The book's line is that two weeks of low fibre starts eroding the barrier. Fibre works like a trained skill: the more you eat regularly, the better your microbes get at turning it into SCFAs. Stop eating it and they lose the knack.</p>
+      <p class="src">Desai et al., Cell 2016 (in mice).</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>Variety beats grams: aim for 30 plants a week</h3>
+      <p>The book's "Golden Rule". The American Gut Project found that eating <b>30+ different plants a week</b> was the strongest predictor of a diverse gut, more than whether someone was vegan, vegetarian or omnivore. Every plant carries a different mix of fibre, which feeds a different team of microbes. Herbs, spices, seeds, grains and beans all count.</p>
+      <p class="src">McDonald et al., mSystems 2018.</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>Gas and bloating mean your gut is untrained, not inflamed</h3>
+      <p>Struggling with beans or onions usually means your microbes aren't used to them yet. It doesn't mean the food is harming you. Treat your gut like a muscle: <b>start low, go slow</b>, and keep training it. Cutting food groups out makes the sensitivity worse over time. (A true allergy, with hives or swelling, is different. Avoid that food and see a doctor.)</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>Whole grains and beans are the foundation</h3>
+      <p>Beans and lentils are the only food group that consistently predicted living longer across the world's long-lived populations. Whole grains lower inflammation markers. Unless you have coeliac disease, going gluten-free <i>reduces</i> good bacteria. Many people who think gluten bothers them are actually reacting to <b>fructans</b> (a FODMAP). The case against lectins rests on test-tube studies, while human studies keep finding that beans are good for you.</p>
+      <p class="src">Skodje et al., Gastroenterology 2018: fructans, not gluten, triggered symptoms.</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>The "second meal effect"</h3>
+      <p>Eat lentils at lunch and your blood sugar spikes less at <i>dinner</i>, even if dinner is white bread. The microbes you fed at lunch are still producing SCFAs hours later. Every fibre-rich meal sets up the next one.</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>Have a little fermented food every day</h3>
+      <p>Sauerkraut, kimchi, miso, tempeh, live dairy-free yoghurt and proper sourdough bring in live microbes plus compounds made during fermentation. Start with a forkful, not a bowl. Kombucha is fine but it's not a cure-all, so don't down it by the litre.</p>
+      <p class="src">A 2021 Stanford trial (after the book came out) found that fermented foods increased gut diversity in 10 weeks, which high fibre alone didn't yet do. Doing both makes sense.</p>
+    </div></div>
+    <div class="idea"><div>
+      <h3>It's the whole lifestyle, not only food</h3>
+      <p>Give your gut about <b>13 hours off overnight</b> (for example, finish eating by 8pm and eat again at 9am), with meals in daylight hours. Sleep, movement (start with 30-minute walks), stress, time with people and water all affect your microbes. Fibre needs water to move through you.</p>
+    </div></div>
+  </div>
+
+  <div class="callout warn"><strong>Where the book goes further than the evidence</strong><p>A lot of the mechanisms come from mouse or test-tube studies, which the author sometimes treats as settled. His positions on dairy, organic food and "eat as much as you want and stay lean" are stronger than the research supports. The core message holds up well, though: eat more fibre from many different plants, and less ultra-processed food.</p></div>
+</section>
+
+<!-- ============ AVOID ============ -->
+<section id="avoid" data-panel="avoid" hidden>
+  <h2>What to cut, what to limit, what to stop worrying about</h2>
+  <p class="intro">The book's view, ranked by how hard it pushes. Some of these (dairy, nuts) you already avoid.</p>
+  <div class="avoid">
+    <div class="av"><span class="tag cut">Cut</span><h3>Ultra-processed food</h3><p>Crisps, packaged snacks, ready meals, processed meat, fizzy drinks.</p><p class="why">Every 10% more ultra-processed food in the diet was linked to about 10% higher cancer risk and 14% higher risk of dying early.</p></div>
+    <div class="av"><span class="tag cut">Cut</span><h3>Refined carbs and added sugar</h3><p>White bread, white pasta, sugary cereal, pastries, sweets.</p><p class="why">With the fibre stripped out, they're absorbed before reaching your microbes, and they feed the inflammatory ones.</p></div>
+    <div class="av"><span class="tag cut">Cut</span><h3>Artificial sweeteners</h3><p>Diet drinks, "zero sugar" products, sweetener sachets.</p><p class="why">Shown to shift gut bacteria towards glucose intolerance (Suez 2014). The author's own words: "Keep that crap away from me."</p></div>
+    <div class="av"><span class="tag cut">Cut</span><h3>Certain additives</h3><p>Check labels for <b>carboxymethylcellulose (E466)</b>, <b>polysorbate 80 (E433)</b>, <b>trehalose</b>, titanium dioxide (E171).</p><p class="why">Emulsifiers caused gut inflammation in mice. Trehalose has been linked to more aggressive C. diff strains.</p></div>
+    <div class="av"><span class="tag cut">Cut</span><h3>Trans fats and fried food</h3><p>Margarine, deep-fried takeaway, anything listing "partially hydrogenated" oil.</p><p class="why">Everyone agrees these are harmful.</p></div>
+    <div class="av"><span class="tag lim">Limit</span><h3>Red and processed meat</h3><p>The author aims for 90%+ plants, with meat as a side or a treat.</p><p class="why">Gut bacteria turn compounds in red meat into TMAO, which is linked to heart disease. It also feeds inflammatory bacteria. Levels drop about 4 weeks after cutting back.</p></div>
+    <div class="av"><span class="tag lim">Limit</span><h3>Saturated fat</h3><p>Butter, ghee, coconut oil in coffee, fatty meat. Use olive oil instead.</p><p class="why">In a 6-month trial, more fat in the diet shifted gut bacteria towards an inflammatory profile.</p></div>
+    <div class="av"><span class="tag lim">Limit</span><h3>Fruit juice and smoothies</h3><p>Eat whole fruit instead.</p><p class="why">An orange has 2.3 g of fibre. A glass of OJ has 0.5 g and 2.5× the sugar.</p></div>
+    <div class="av"><span class="tag lim">Limit</span><h3>Salt</h3><p>Mostly hidden in processed food.</p><p class="why">Excess salt changes gut bacteria in ways linked to autoimmunity and high blood pressure.</p></div>
+    <div class="av"><span class="tag lim">Limit</span><h3>Medicines you don't need</h3><p>Antibiotics, ibuprofen and other NSAIDs, PPIs (heartburn tablets).</p><p class="why">5 days of ciprofloxacin wipes out about a third of gut bacteria. <b>Don't stop anything prescribed.</b> Just ask your GP whether you really need it.</p></div>
+    <div class="av"><span class="tag lim">Limit</span><h3>Keto, carnivore, paleo</h3><p>Fast weight loss, poor for your gut.</p><p class="why">An all-animal diet grew inflammatory bacteria (Bilophila) within days. Paleo raised TMAO, mainly because it cuts out whole grains.</p></div>
+    <div class="av"><span class="tag myth">Stop worrying</span><h3>Carbs, fruit, gluten, lectins, soy</h3><p>Whole-food carbs, whole fruit, wholewheat, beans and soy (tofu, tempeh, edamame, miso) are all good for your gut.</p><p class="why">The exception is gluten if you have coeliac disease or a wheat allergy.</p></div>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz" data-panel="quiz" hidden>
+  <h2>Quiz yourself</h2>
+  <p class="intro">Twelve questions covering the whole book. Get them all right and you've basically read it.</p>
+  <div class="quiz" id="quizBox" aria-live="polite"></div>
+</section>
+
+<!-- ============ PLAN ============ -->
+<section id="plan" data-panel="plan" hidden>
+  <h2>Ramp up over 8 weeks</h2>
+  <p class="intro">Jumping from ~20 g to 70 g overnight is how people end up bloated and give up. Move up a level every two weeks. If a level feels rough, stay on it longer. Tap a level to set today's target.</p>
+
+  <div class="ramp" id="ramp"></div>
+
+  <ul class="rules">
+    <li><b>Add about 5 g every 3–4 days</b><span>For example, swap white bread for wholemeal, then add chia to your oats, then add half a tin of beans.</span></li>
+    <li><b>Drink more water as you go</b><span>Aim for 2–2.5 L a day. Lots of fibre without enough water causes constipation.</span></li>
+    <li><b>Spread it across the day</b><span>Three meals of about 20 g each are easier on your gut than one 60 g dinner.</span></li>
+    <li><b>Start with the gentlest foods</b><span>Rinsed tinned beans and lentils, red lentils, tofu, tempeh and oats. Raw onion, garlic and big bowls of beans come later.</span></li>
+    <li><b>Bloated? Hold, don't quit</b><span>Stay at that level for a week, then carry on. Some gas is normal. It's a sign your microbes are working.</span></li>
+    <li><b>Count plants as well as grams</b><span>Aim for 30 different plants a week. Herbs, spices and seeds count, so a spice rack does a lot of the work.</span></li>
+    <li><b>Make sure you're not constipated first</b><span>The book says constipation is the number one cause of bloating. Fix that before ramping up.</span></li>
+    <li><b>See a GP if…</b><span>…you notice blood in your poo, ongoing pain, unexplained weight loss, or a lasting change in how often you go.</span></li>
+  </ul>
+
+  <div class="tracker">
+    <div class="trackhead">
+      <div><div class="eyebrow">Today's fibre</div><div class="total" id="total">0<small> / 30 g</small></div></div>
+      <div style="text-align:right"><div class="eyebrow" style="color:var(--beet)">Protein</div><div class="p" style="font-size:22px" id="ptotal">0 / 125 g</div></div>
+    </div>
+    <div class="meter"><i id="meterFill" style="width:0"></i></div>
+    <p class="log" id="log">Tap whatever you ate. Values are typical UK portions, so check labels for exact numbers. Saved on this device and resets each day.</p>
+    <div class="chips" id="chips"></div>
+    <div class="trackfoot">
+      <span class="log" id="plantCount">0 different plants today</span>
+      <div style="display:flex;gap:8px"><button class="btn ghost" id="undo" type="button">Undo last</button><button class="btn ghost" id="reset" type="button">Clear today</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHOP ============ -->
+<section id="shop" data-panel="shop" hidden>
+  <h2>Shopping list</h2>
+  <p class="intro">All available at Tesco, Lidl, Aldi or Sainsbury's. Mostly tins, pouches and frozen food, so nothing goes off on you if you're moving around. Fibre and protein are per portion. Tick items off as you shop (saved on this device).</p>
+  <div id="shopList"></div>
+</section>
+
+<!-- ============ RECIPES ============ -->
+<section id="recipes" data-panel="recipes" hidden>
+  <h2>Recipes</h2>
+  <p class="intro">Chosen for borrowed kitchens: a kettle, a microwave or one pan is enough. Several make 4 portions for the fridge. All dairy-free and nut-free. If you eat meat, fish or eggs, add them on top. The book's rule is "progress over perfection".</p>
+
+  <div class="daycard">
+    <h3>A full-target day: 75 g fibre, 123 g protein</h3>
+    <div class="tbl" style="background:transparent;border-color:rgba(127,127,127,.35)">
+      <table>
+        <thead><tr><th>Meal</th><th class="num">Fibre</th><th class="num">Protein</th></tr></thead>
+        <tbody>
+          <tr><td>Big Jar Overnight Oats</td><td class="num"><span class="g">25 g</span></td><td class="num"><span class="p">38 g</span></td></tr>
+          <tr><td>Microwave Lentil Power Bowl</td><td class="num"><span class="g">22 g</span></td><td class="num"><span class="p">34 g</span></td></tr>
+          <tr><td>A pear and a few cornichons</td><td class="num"><span class="g">6 g</span></td><td class="num"><span class="p">1 g</span></td></tr>
+          <tr><td>Tofu &amp; Edamame Noodle Stir-Fry</td><td class="num"><span class="g">22 g</span></td><td class="num"><span class="p">50 g</span></td></tr>
+        </tbody>
+        <tfoot><tr><td>Total</td><td class="num">75 g</td><td class="num">123 g</td></tr></tfoot>
+      </table>
+    </div>
+    <p style="font-size:14.5px;opacity:.8">This is the week 7+ target. Don't start here. Earlier weeks use smaller portions of the same meals (half the chia, half the lentils), as in the ramp-up plan.</p>
+  </div>
+
+  <div class="recipes" id="recipeList"></div>
+</section>
+
+<!-- ============ STUDIES ============ -->
+<section id="studies" data-panel="studies" hidden>
+  <h2>The studies behind it</h2>
+  <p class="intro">The key studies the book relies on, plus a couple published since. Labels show whether a study was done in people or in animals, which matters. The author's full reference list (600+ papers) is at <a href="https://theplantfedgut.com/research/" target="_blank" rel="noopener">theplantfedgut.com/research</a>.</p>
+  <div class="studies" id="studyList"></div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  Fibre values are approximate for typical UK portions and vary by brand, so check labels. This is a summary of a book, not medical advice. If you have a gut condition, ramp up with your GP or a dietitian.
+</footer>
+
+<script>
+(function(){
+  /* ---------- storage helpers ---------- */
+  function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+  function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+  /* ---------- tabs ---------- */
+  var tabs=[].slice.call(document.querySelectorAll('[data-tab]'));
+  var panels=[].slice.call(document.querySelectorAll('[data-panel]'));
+  function show(id){
+    if(!panels.some(function(p){return p.dataset.panel===id})) id='ideas';
+    panels.forEach(function(p){p.hidden=p.dataset.panel!==id});
+    tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.tab===id?'true':'false')});
+    save('ff_tab',id);
+  }
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.tab);window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'smooth'})})});
+  var h=(location.hash||'').replace('#','');
+  show(h||load('ff_tab','ideas'));
+
+  /* ---------- quiz ---------- */
+  var Q=[
+    {q:"According to the American Gut Project, what is the single biggest predictor of a healthy, diverse gut?",o:["Total grams of fibre per day","Taking a daily probiotic","Eating 30+ different plants a week","Being vegan"],a:2,e:"Plant variety. 30+ different plants a week beat counting grams, and beat whether people called themselves vegan, vegetarian or omnivore."},
+    {q:"What are short-chain fatty acids (SCFAs)?",o:["Fats in olive oil","Compounds your gut bacteria make when they ferment fibre","A type of omega-3","Fibre supplements"],a:1,e:"Acetate, propionate and butyrate are made by microbes from fibre. They're what the book calls postbiotics: prebiotics + probiotics = postbiotics."},
+    {q:"Which SCFA is the main fuel for the cells lining your colon?",o:["Acetate","Propionate","Butyrate","Lactate"],a:2,e:"Butyrate provides up to 70% of colon cells' energy, and repairs the gut wall by strengthening the 'tight junctions' between cells."},
+    {q:"Why can't you digest fibre yourself?",o:["Stomach acid destroys it","Humans have ~17 carb-breaking enzymes; gut microbes have up to ~60,000","It's absorbed too fast","Fibre is a protein"],a:1,e:"You hand fibre digestion over to your microbes. That's why feeding them matters."},
+    {q:"What happens to gut bacteria on a low-fibre diet?",o:["They go dormant harmlessly","They start eating your gut's protective mucus layer","They turn into probiotics","Nothing changes"],a:1,e:"Starved microbes graze on the mucus barrier, which raises the risk of leaky gut and infection (Desai 2016, in mice)."},
+    {q:"You eat a big bowl of six-bean chilli and get bloated. The book says this most likely means…",o:["Beans are inflammatory for you","You have a bean allergy","Your gut microbes aren't trained for it yet. Go low and slow","You should cut out beans"],a:2,e:"Sensitivity usually means a gut that hasn't had the practice. Train it like a muscle with small, regular amounts. Cutting the food out makes the sensitivity worse."},
+    {q:"In the study of people with 'gluten sensitivity', what actually caused their symptoms?",o:["Gluten","Fructans","Lectins","Lactose"],a:1,e:"Fructans, a FODMAP found in wheat, onion and garlic, triggered symptoms. Gluten caused no more symptoms than the placebo."},
+    {q:"What is the 'second meal effect'?",o:["Eating two dinners","Lentils at lunch lower your blood sugar spike at dinner","Your second meal digests faster","Snacking reduces hunger"],a:1,e:"The microbes you fed at lunch are still making SCFAs at dinner, which steadies your blood sugar."},
+    {q:"Red meat, egg yolk and dairy can lead gut bacteria to produce which compound linked to heart disease?",o:["Butyrate","Serotonin","TMAO","Equol"],a:2,e:"TMAO (trimethylamine N-oxide). Plant-heavy diets build a gut that doesn't make much of it, and levels fall about 4 weeks after cutting back on red meat."},
+    {q:"What does the F GOALS acronym stand for?",o:["Fruit/Fermented, Greens/Grains, Omega-3 seeds, Aromatics, Legumes, Sulforaphane","Fibre, Grains, Oats, Apples, Lentils, Spinach","Fasting, Greens, Oils, Avocado, Leaves, Seeds","Fruit, Garlic, Onion, Asparagus, Leeks, Shallots"],a:0,e:"The author's six favourite food groups: fruit and fermented foods, greens and whole grains, omega-3 seeds (flax, chia, hemp), aromatics (onion, garlic), legumes, and sulforaphane (broccoli and other cruciferous veg)."},
+    {q:"What is the 'chop then stop' trick for garlic, onions and broccoli?",o:["Chop and freeze","Chop, then wait ~10 minutes before cooking so the healthy compounds form","Chop finely to digest faster","Stop eating them raw"],a:1,e:"Chopping triggers an enzyme reaction (allicin in garlic, sulforaphane in broccoli). Giving it time before heat means more of the good compounds survive cooking."},
+    {q:"How long does the book suggest resting your gut overnight?",o:["8 hours","10 hours","At least 13 hours, with eating in daylight","24 hours once a week"],a:2,e:"At least 13 hours without food (so an eating window of 11 hours or less), timed with your body clock. For example, eat between 8am and 7pm and avoid late-night snacks."}
+  ];
+  var qi=0,score=0,answered=false,box=document.getElementById('quizBox');
+  function renderQ(){
+    if(qi>=Q.length){
+      var msg=score===Q.length?"Perfect. You've got the whole book.":score>=9?"Strong. You've got the core of it.":score>=6?"Good start. Re-read the Big ideas tab and try again.":"Read the Big ideas tab first, then come back.";
+      box.innerHTML='<div class="qmeta"><span>Done</span><span>'+score+' / '+Q.length+'</span></div><div class="qbar"><i style="width:100%"></i></div><div class="qtext">'+score+' out of '+Q.length+'</div><p>'+msg+'</p><div class="qactions"><button class="btn" id="qre" type="button">Try again</button></div>';
+      document.getElementById('qre').onclick=function(){qi=0;score=0;renderQ()};
+      return;
+    }
+    answered=false;
+    var item=Q[qi];
+    box.innerHTML='<div class="qmeta"><span>Question '+(qi+1)+' of '+Q.length+'</span><span>Score '+score+'</span></div><div class="qbar"><i style="width:'+(qi/Q.length*100)+'%"></i></div><div class="qtext">'+item.q+'</div><div class="opts">'+item.o.map(function(o,i){return '<button class="opt" type="button" data-i="'+i+'">'+o+'</button>'}).join('')+'</div><div id="qexp"></div><div class="qactions"><button class="btn" id="qnext" type="button" disabled>Next</button></div>';
+    [].forEach.call(box.querySelectorAll('.opt'),function(b){
+      b.onclick=function(){
+        if(answered)return; answered=true;
+        var pick=+b.dataset.i, ok=pick===item.a; if(ok)score++;
+        [].forEach.call(box.querySelectorAll('.opt'),function(x){x.disabled=true;var i=+x.dataset.i;if(i===item.a)x.classList.add('right');else if(i===pick)x.classList.add('wrong')});
+        document.getElementById('qexp').innerHTML='<p class="explain"><b>'+(ok?'Right. ':'Not quite. ')+'</b>'+item.e+'</p>';
+        var n=document.getElementById('qnext');n.disabled=false;n.textContent=qi===Q.length-1?'See score':'Next';n.focus();
+      };
+    });
+    document.getElementById('qnext').onclick=function(){qi++;renderQ()};
+  }
+  renderQ();
+
+  /* ---------- ramp ---------- */
+  var levels=[{w:"Wk 1–2",g:30,d:"UK minimum. Swap to wholegrains, add fruit"},{w:"Wk 3–4",g:40,d:"Add chia/flax, half a tin of beans a day"},{w:"Wk 5–6",g:50,d:"A bean or lentil portion at two meals"},{w:"Wk 7–8",g:60,d:"Full recipes, 30 plants a week"},{w:"Wk 9+",g:70,d:"Your 60–75 g zone"}];
+  var lvl=load('ff_level',0); if(!(lvl>=0&&lvl<levels.length))lvl=0;
+  var rampEl=document.getElementById('ramp');
+  function renderRamp(){
+    rampEl.innerHTML=levels.map(function(l,i){var hgt=40+l.g*1.6;return '<button class="step" type="button" aria-pressed="'+(i===lvl)+'" data-l="'+i+'"><div class="bar" style="height:'+hgt+'px"><i style="height:'+(l.g/75*100)+'%"></i></div><b>'+l.g+' g</b><span>'+l.w+'<br>'+l.d+'</span></button>'}).join('');
+    [].forEach.call(rampEl.querySelectorAll('.step'),function(b){b.onclick=function(){lvl=+b.dataset.l;save('ff_level',lvl);renderRamp();renderTrack()}});
+  }
+
+  /* ---------- tracker ---------- */
+  var foods=[
+    ["Oats 60g",6,8,"oats"],["Chia 2 tbsp",9,4,"chia"],["Ground flax 1 tbsp",2,2,"flax"],["Hemp seeds 3 tbsp",1,10,"hemp"],
+    ["Frozen berries 150g",6,1,"berries"],["Raspberries 125g",8,2,"raspberries"],["Pear",5.5,0.5,"pear"],["Apple",4.4,0.5,"apple"],["Banana",3,1.3,"banana"],["Avocado ½",5,1.5,"avocado"],["Prunes ×5",3,1,"prunes"],
+    ["Lentils, pouch 250g",14,20,"lentils"],["Beans, ½ tin",8,9,"beans"],["Chickpeas, ½ tin",7,9,"chickpeas"],["Baked beans, ½ tin",7.5,10,"haricot beans"],["Edamame 150g",8,17,"edamame"],["Red lentils 50g dry",5.5,12,"red lentils"],
+    ["Wholemeal bread ×2",6,9,"wheat"],["Rye bread ×2",8,6,"rye"],["Wholemeal wrap",4,5,"wheat"],["Wholewheat pasta 100g dry",8,13,"wheat"],["Wholegrain rice pouch ½",3,4,"brown rice"],["Shredded Wheat ×2",5,5,"wheat"],["Popcorn 30g",4,3,"corn"],
+    ["Broccoli 150g",4,4,"broccoli"],["Frozen peas 80g",4,4,"peas"],["Spinach/kale handful",2,2,"greens"],["Carrot",2,0.5,"carrot"],["Baked potato w/ skin",7,7,"potato"],["Sweet potato",4,2,"sweet potato"],["Sweetcorn 80g",2,2,"corn"],["Brussels sprouts 100g",4,3.5,"brussels sprouts"],
+    ["Hummus 4 tbsp",3.5,4,"chickpeas"],["Pumpkin seeds 30g",2,9,"pumpkin seeds"],["Sauerkraut/kimchi",1,0.5,"cabbage"],["Tofu 200g",2,26,"soy"],["Tempeh 100g",5,19,"soy"],["Soya milk 250ml",1,8,"soy"],["Dark choc 85% 30g",3,3,"cacao"]
+  ];
+  var today=new Date().toISOString().slice(0,10);
+  var tk=load('ff_track',{d:today,items:[]}); if(tk.d!==today)tk={d:today,items:[]};
+  var chipsEl=document.getElementById('chips');
+  chipsEl.innerHTML=foods.map(function(f,i){return '<button class="chip" type="button" data-f="'+i+'">'+f[0]+' <span class="g">'+f[1]+'g</span></button>'}).join('');
+  [].forEach.call(chipsEl.querySelectorAll('.chip'),function(c){c.onclick=function(){tk.items.push(+c.dataset.f);save('ff_track',tk);renderTrack()}});
+  document.getElementById('undo').onclick=function(){tk.items.pop();save('ff_track',tk);renderTrack()};
+  document.getElementById('reset').onclick=function(){tk.items=[];save('ff_track',tk);renderTrack()};
+  function renderTrack(){
+    var g=0,p=0,plants={};
+    tk.items.forEach(function(i){var f=foods[i];if(!f)return;g+=f[1];p+=f[2];plants[f[3]]=1});
+    var target=levels[lvl].g;
+    document.getElementById('total').innerHTML=Math.round(g*10)/10+'<small> / '+target+' g</small>';
+    document.getElementById('ptotal').textContent=Math.round(p)+' / 125 g';
+    document.getElementById('meterFill').style.width=Math.min(100,g/target*100)+'%';
+    var n=Object.keys(plants).length;
+    document.getElementById('plantCount').textContent=n+' different plant'+(n===1?'':'s')+' today';
+    if(tk.items.length){
+      var last=foods[tk.items[tk.items.length-1]];
+      document.getElementById('log').textContent=(g>=target?'Target hit. ':'')+'Last added: '+last[0]+' (+'+last[1]+' g). '+(g<target?Math.round((target-g)*10)/10+' g to go.':'');
+    } else {
+      document.getElementById('log').textContent='Tap whatever you ate. Values are typical UK portions, so check labels for exact numbers. Saved on this device and resets each day.';
+    }
+  }
+  renderRamp();renderTrack();
+
+  /* ---------- shopping list ---------- */
+  var shop=[
+    {h:"Beans & lentils",s:"the backbone",rows:[
+      ["Tinned chickpeas","½ tin drained",7,9,"Rinse to cut gas. Use for hummus, smash wraps, curries"],
+      ["Tinned black / kidney / mixed beans","½ tin drained",8,9,"For chilli, wraps, salads"],
+      ["Baked beans (reduced sugar)","½ tin",7.5,10,"Zero prep"],
+      ["Ready-cooked lentil pouches (puy / green)","1 pouch 250g",14,20,"Microwave or eat cold. Merchant Gourmet, or the supermarket's own"],
+      ["Dried red lentils","50g dry",5.5,12,"Cheapest fibre there is. Cooks in 15 min, no soaking"],
+      ["Frozen edamame beans","150g",8,17,"Highest-protein bean"]]},
+    {h:"Whole grains",s:"swap out the white versions",rows:[
+      ["Porridge oats","60g",6,8,"Overnight oats, no cooking"],
+      ["Wholemeal or rye bread","2 slices",6,9,"Dense rye or seeded wholemeal is highest"],
+      ["Wholemeal tortilla wraps","1 wrap",4,5,"No-cook lunches"],
+      ["Wholewheat pasta / noodles","100g dry",8,13,"Or red lentil pasta: similar fibre, double the protein"],
+      ["Wholegrain rice pouches","½ pouch",3,4,"2 min in the microwave"],
+      ["Shredded Wheat / Weetabix","2 biscuits",5,5,"No added sugar"],
+      ["Popcorn kernels","30g popped",4,3,"Snack that counts as a whole grain"]]},
+    {h:"Seeds",s:"omega-3 + fibre (no nuts needed)",rows:[
+      ["Chia seeds","2 tbsp",9,4,"Highest fibre per spoon"],
+      ["Ground flaxseed (linseed)","1 tbsp",2,2,"Buy it ground. Whole seeds pass straight through"],
+      ["Hulled hemp seeds","3 tbsp",1,10,"For protein, not fibre"],
+      ["Pumpkin + sunflower seeds","30g",2,9,"Sprinkle on everything"],
+      ["Tahini","1 tbsp",1,3,"Sesame, not a nut. For dressings and hummus"]]},
+    {h:"Fruit",s:"fresh + frozen",rows:[
+      ["Frozen mixed berries / raspberries","150g",6,1,"Raspberries are the fibre champion (8g per punnet)"],
+      ["Pears","1",5.5,0.5,"Higher fibre than apples"],
+      ["Apples","1",4.4,0.5,"Eat the skin"],
+      ["Bananas","1",3,1.3,"Slightly green has more resistant starch"],
+      ["Avocado","½",5,1.5,"Ripen at room temp"],
+      ["Prunes / dried figs","5",3,1,"Natural laxative, so take it easy at first"]]},
+    {h:"Veg",s:"frozen is just as good",rows:[
+      ["Frozen broccoli / stir-fry mix","150g",4,4,"Sprinkle with mustard powder to restore the sulforaphane enzyme"],
+      ["Frozen peas + sweetcorn","80g",4,4,"Into everything"],
+      ["Frozen spinach / bagged kale","handful",2,2,"Wilt into anything"],
+      ["Baking potatoes / sweet potatoes","1",7,7,"Microwave 8 min. Cooled potato has more resistant starch"],
+      ["Carrots, onions, garlic, peppers","—",2,1,"Onion and garlic: chop, then wait 10 min before cooking"],
+      ["Tinned chopped tomatoes","½ tin",2,2,"Base for soups and chilli"]]},
+    {h:"Protein + fermented",s:"to reach 125 g",rows:[
+      ["Firm tofu","200g",2,26,"Press, cube, pan-fry"],
+      ["Tempeh","100g",5,19,"Fermented, so it counts twice"],
+      ["Soya milk (unsweetened)","250ml",1,8,"Highest-protein plant milk"],
+      ["Soya yoghurt, plain (Alpro / own brand)","150g",1,6,"Pick one with live cultures"],
+      ["Sauerkraut / kimchi (refrigerated, unpasteurised)","2 tbsp",1,0.5,"Fridge aisle, not the shelf jar. Start with a forkful"],
+      ["Miso paste","1 tbsp",0.5,2,"Stir in after cooking. Boiling kills the microbes"]]},
+    {h:"Flavour",s:"each one counts as a plant",rows:[
+      ["Cumin, smoked paprika, turmeric, curry powder, chilli flakes","—",0,0,"Turmeric + black pepper = 20× more curcumin absorbed"],
+      ["Fresh coriander / parsley / basil","—",0.5,0,"Add at the end"],
+      ["Lemons, ginger, soy sauce or tamari","—",0,0,"Lemon helps you absorb the iron in greens"],
+      ["Cornichons / gherkins","—",0.5,0,"Vinegar pickles aren't live-fermented, but they're fine"]]}
+  ];
+  var got=load('ff_shop',{});
+  var shopEl=document.getElementById('shopList'),html='',rid=0;
+  shop.forEach(function(grp){
+    html+='<div class="shopgroup"><h3>'+grp.h+' <small>'+grp.s+'</small></h3><div class="tbl"><table><thead><tr><th style="width:34px"></th><th>Item</th><th>Portion</th><th class="num">Fibre</th><th class="num">Protein</th></tr></thead><tbody>';
+    grp.rows.forEach(function(r){
+      var id='s'+(rid++),on=!!got[id];
+      html+='<tr class="'+(on?'got':'')+'"><td><input type="checkbox" class="check" id="'+id+'" '+(on?'checked':'')+' aria-label="Got '+r[0]+'"></td><td>'+r[0]+'<span class="note">'+r[4]+'</span></td><td>'+r[1]+'</td><td class="num"><span class="g">'+(r[2]?r[2]+' g':'—')+'</span></td><td class="num"><span class="p">'+(r[3]?r[3]+' g':'—')+'</span></td></tr>';
+    });
+    html+='</tbody></table></div></div>';
+  });
+  shopEl.innerHTML=html;
+  [].forEach.call(shopEl.querySelectorAll('.check'),function(c){c.onchange=function(){got[c.id]=c.checked;save('ff_shop',got);c.closest('tr').classList.toggle('got',c.checked)}});
+
+  /* ---------- recipes ---------- */
+  var R=[
+    {t:"Big Jar Overnight Oats",kit:"No cooking · a jar or tub",time:"5 min the night before",serves:"1",f:25,p:38,
+     ing:["60g porridge oats","2 tbsp chia seeds","1 tbsp ground flaxseed","3 tbsp hulled hemp seeds","150g frozen berries","250ml unsweetened soya milk","150g plain soya yoghurt","Pinch of cinnamon"],
+     m:["Put everything except the berries in a jar and stir well. Chia clumps if you don't stir.","Tip the frozen berries on top. They thaw overnight and make a juice.","Lid on, fridge overnight. Eat cold, or microwave 2 min."],
+     tip:"Weeks 1–2: use 1 tbsp chia and skip the flax (about 15 g fibre). Make three jars on Sunday to cover the next few days."},
+    {t:"Microwave Lentil Power Bowl",kit:"Microwave only",time:"5 min",serves:"1",f:22,p:34,
+     ing:["1 pouch ready-cooked puy or green lentils (250g)","½ pouch wholegrain rice","80g frozen peas","Big handful of spinach","2 tbsp sauerkraut or kimchi","30g pumpkin seeds","Dressing: 1 tbsp tahini, juice of ½ lemon, splash of water, pinch of salt"],
+     m:["Microwave the lentils, rice and peas together in a bowl for 2–3 min.","Stir in the spinach so it wilts.","Whisk the dressing and pour over. Top with kimchi (add it after heating so the microbes survive) and seeds."],
+     tip:"Works cold as a packed lunch. Weeks 1–3: use half the lentil pouch and keep the rest for tomorrow."},
+    {t:"Tofu & Edamame Noodle Stir-Fry",kit:"One frying pan",time:"20 min",serves:"1 (big)",f:22,p:50,
+     ing:["200g firm tofu, cubed","150g frozen edamame","200g frozen stir-fry veg or broccoli","75g wholewheat noodles","2 garlic cloves + thumb of ginger, chopped (then wait 10 min)","2 tbsp soy sauce or tamari, 1 tsp miso, squeeze of lime","Chilli flakes, sesame seeds"],
+     m:["Cook the noodles per the packet. Drain.","Pat the tofu dry and fry in a little oil on high until golden, about 6–8 min. Push to one side.","Add the frozen veg, edamame, garlic and ginger. Stir-fry 4 min.","Add the noodles. Take off the heat, then stir in the soy, miso and lime. Top with chilli and sesame."],
+     tip:"Miso goes in off the heat to keep its live cultures. If you eat chicken or prawns, swap them in for half the tofu."},
+    {t:"Three-Bean Batch Chilli",kit:"One big pot",time:"35 min · makes 4",serves:"4",f:18,p:20,
+     ing:["1 onion, 3 garlic cloves, 1 pepper, 2 carrots, chopped","3 tins beans (kidney, black, mixed), drained and rinsed","100g dried red lentils","1 tin chopped tomatoes + 1 tin of water","150g frozen sweetcorn","2 tsp cumin, 2 tsp smoked paprika, 1 tsp chilli, 1 tsp oregano","Big handful of spinach, 1 tsp cocoa powder (optional)"],
+     m:["Chop the onion and garlic and leave 10 min (chop then stop). Soften in a little oil with the carrot and pepper, 5 min.","Add the spices for 1 min, then the tomatoes, water, lentils and beans.","Simmer 20–25 min until the lentils break down. Stir in the corn and spinach for the last 3 min.","Cool and portion. Keeps 4 days in the fridge and freezes well."],
+     tip:"Serve on a microwaved baked potato (+7 g fibre, +7 g protein) for about 25 g fibre per plate. Add soya mince to push protein over 30 g."},
+    {t:"No-Cook Chickpea Smash Wraps",kit:"Fork + bowl",time:"8 min",serves:"1",f:19,p:20,
+     ing:["½ tin chickpeas, rinsed","1 tbsp tahini, juice of ½ lemon, pinch of cumin, salt, pepper","2 wholemeal wraps","1 grated carrot, handful spinach","2 tbsp sauerkraut","Chopped cornichons"],
+     m:["Mash the chickpeas with the tahini, lemon, cumin, salt and pepper. Leave it chunky.","Spread over the wraps and pile on the carrot, spinach, sauerkraut and cornichons.","Roll up tight. Wrap in foil if you're taking it out."],
+     tip:"Good for days on the go. Add ½ avocado for +5 g fibre."},
+    {t:"Red Lentil & Butter Bean Soup",kit:"One pot",time:"30 min · makes 4",serves:"4",f:13,p:16,
+     ing:["200g dried red lentils","1 tin butter beans, drained","1 onion, 3 carrots, 2 celery sticks, 3 garlic cloves","1 tin chopped tomatoes + 1L veg stock","1 tsp each turmeric, cumin, curry powder + black pepper","2 handfuls frozen spinach, lemon to finish"],
+     m:["Chop the veg and garlic and leave 10 min. Soften in oil for 5 min.","Add the spices, lentils, tomatoes and stock. Simmer 20 min.","Add the butter beans and spinach for 5 min. Blend half if you like it creamy.","Lemon and pepper to finish. Freezes well."],
+     tip:"With 2 slices of wholemeal bread it's about 19 g fibre. Red lentils are the gentlest legume, good for weeks 1–2."},
+    {t:"Beans on Rye with Avocado",kit:"Microwave + toaster (or not)",time:"5 min",serves:"1",f:19,p:21,
+     ing:["½ tin reduced-sugar baked beans","2 slices rye or seeded wholemeal bread","½ avocado","Handful spinach, chilli flakes"],
+     m:["Microwave the beans 90 sec with the spinach stirred in.","Toast the bread and smash the avocado on top.","Beans on, chilli flakes on."],
+     tip:"The easiest high-fibre breakfast in the UK. Add a pear on the side for 25 g fibre."},
+    {t:"Chia Berry Pot (snack or pudding)",kit:"No cooking",time:"2 min + 2 hrs",serves:"1",f:14,p:9,
+     ing:["2 tbsp chia seeds","150ml soya milk","100g raspberries or frozen berries","1 tsp cocoa powder or vanilla (optional)"],
+     m:["Stir the chia into the milk. Stir again after 5 min.","Fridge for 2 hours or more until it sets like pudding.","Top with berries."],
+     tip:"Helps when sugar cravings hit. The book says your cravings change as your microbes do."}
+  ];
+  document.getElementById('recipeList').innerHTML=R.map(function(r){
+    return '<details class="rec"><summary><h3>'+r.t+'</h3><div class="macros"><span class="g">'+r.f+' g fibre</span><span class="p">'+r.p+' g protein</span></div><div class="recmeta"><span>'+r.kit+'</span><span>'+r.time+'</span><span>Per serving · serves '+r.serves+'</span></div></summary><div class="recbody"><div><h4>You need</h4><ul>'+r.ing.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div><div><h4>Method</h4><ol>'+r.m.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ol></div><p class="tip">'+r.tip+'</p></div></details>';
+  }).join('');
+
+  /* ---------- studies ---------- */
+  var S=[
+    ["Carbohydrate quality and human health: systematic reviews and meta-analyses","Reynolds et al. · The Lancet · 2019","10.1016/S0140-6736(18)31809-9","Humans · 243 studies","The book's headline evidence. More fibre was linked to lower death rates, heart disease, stroke, type 2 diabetes and bowel cancer. Benefits kept rising above 25–29 g a day, the highest intake most studies measured."],
+    ["American Gut: an open platform for citizen science microbiome research","McDonald et al. · mSystems · 2018","10.1128/mSystems.00031-18","Humans · ~10,000 people","Source of the 30 plants a week rule. Plant variety predicted gut diversity better than any diet label."],
+    ["Diet rapidly and reproducibly alters the human gut microbiome","David et al. · Nature · 2014","10.1038/nature12820","Humans","An all-animal diet grew bile-tolerant, inflammatory bacteria (Bilophila) and suppressed fibre fermenters within days."],
+    ["Fat, fibre and cancer risk in African Americans and rural Africans","O'Keefe et al. · Nature Communications · 2015","10.1038/ncomms7342","Humans · 2-week diet swap","Swapping diets for two weeks: the high-fibre African diet raised butyrate 2.5× in African Americans, and the Western diet halved it in rural Africans."],
+    ["Gut bacteria selectively promoted by dietary fibers alleviate type 2 diabetes","Zhao et al. · Science · 2018","10.1126/science.aao5774","Humans","A high-fibre diet boosted SCFA-producing bacteria and improved blood sugar control in type 2 diabetes."],
+    ["A dietary fiber-deprived gut microbiota degrades the colonic mucus barrier","Desai et al. · Cell · 2016","10.1016/j.cell.2016.10.043","Mice","Without fibre, gut bacteria ate the protective mucus layer and infections took hold more easily."],
+    ["Diet-induced extinctions in the gut microbiota compound over generations","Sonnenburg et al. · Nature · 2016","10.1038/nature16504","Mice","Low-fibre diets wiped out microbe species, and the losses passed down and added up over generations."],
+    ["Seasonal cycling in the gut microbiome of the Hadza hunter-gatherers","Smits et al. · Science · 2017","10.1126/science.aan4834","Humans","The Hadza (100 g+ fibre a day) have far more diverse guts, and their microbes shift with the seasons as their diet changes."],
+    ["Gut-microbiota-targeted diets modulate human immune status","Wastyk et al. · Cell · 2021","10.1016/j.cell.2021.06.019","Humans · published after the book","Fermented foods raised gut diversity and lowered inflammatory markers in 10 weeks. High fibre alone didn't raise diversity in that time. Do both."],
+    ["Fructan, rather than gluten, induces symptoms in self-reported non-coeliac gluten sensitivity","Skodje et al. · Gastroenterology · 2018","10.1053/j.gastro.2017.10.040","Humans","Fructans caused people's symptoms. Gluten was no worse than the placebo."],
+    ["Personalized nutrition by prediction of glycemic responses","Zeevi et al. · Cell · 2015","10.1016/j.cell.2015.11.001","Humans · 800 people","The same food spiked blood sugar differently in different people, and their gut microbes predicted who."],
+    ["Artificial sweeteners induce glucose intolerance by altering the gut microbiota","Suez et al. · Nature · 2014","10.1038/nature13793","Mice + humans","Sweeteners changed gut bacteria in ways that worsened blood sugar control."],
+    ["Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome","Chassaing et al. · Nature · 2015","10.1038/nature14232","Mice","Carboxymethylcellulose and polysorbate 80 thinned the mucus layer and drove inflammation."],
+    ["Dietary trehalose enhances virulence of epidemic Clostridium difficile","Collins et al. · Nature · 2018","10.1038/nature25178","Mice + epidemiology","The additive trehalose helped aggressive C. diff strains spread."],
+    ["Intestinal microbiota metabolism of L-carnitine promotes atherosclerosis","Koeth et al. · Nature Medicine · 2013","10.1038/nm.3145","Humans + mice","Gut bacteria turn the carnitine in red meat into TMAO. Vegans made far less of it."],
+    ["Effects of dietary fat on gut microbiota: a 6-month randomised feeding trial","Wan et al. · Gut · 2019","10.1136/gutjnl-2018-317609","Humans","With fibre held the same, more fat in the diet shifted gut bacteria towards an inflammatory profile."],
+    ["Consumption of ultra-processed foods and cancer risk (NutriNet-Santé)","Fiolet et al. · BMJ · 2018","10.1136/bmj.k322","Humans · 105,000 people","Every 10% more ultra-processed food was linked to about 12% higher cancer risk."],
+    ["NHS: How to get more fibre into your diet","NHS · UK guidance","https://www.nhs.uk/live-well/eat-well/digestive-health/how-to-get-more-fibre-into-your-diet/","Official guidance","The UK recommendation of 30 g a day, with tips on getting more."]
+  ];
+  document.getElementById('studyList').innerHTML=S.map(function(s){
+    var url=s[2].indexOf('http')===0?s[2]:'https://doi.org/'+s[2];
+    var mouse=/^Mice/.test(s[3]);
+    return '<div class="study"><span class="kind'+(mouse?' mouse':'')+'">'+s[3]+'</span><a href="'+url+'" target="_blank" rel="noopener">'+s[0]+'</a><span class="cite">'+s[1]+'</span><p>'+s[4]+'</p></div>';
+  }).join('');
+})();
+</script>
+
+</body>
+</html>
